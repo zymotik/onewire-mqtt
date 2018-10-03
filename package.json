@@ -1,0 +1,17 @@
+{
+  "name": "onewire-mqtt",
+  "version": "1.0.0",
+  "description": "publish onewire to mqtt with node",
+  "main": "index.js",
+  "scripts": {
+    "run": "node index.js"
+  },
+  "author": "Ian Brown",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "ds18b20": "^0.1.0",
+    "fs": "0.0.1-security",
+    "moment-mini": "^2.22.1",
+    "mqtt": "^2.18.8"
+  }
+}
