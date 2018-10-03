@@ -12,7 +12,7 @@ async function init(){
         sensorIds = await findSensors();
 
         if (sensorIds.length > 0) {
-            log(`Init server: ${settings.server}`);        
+            log(`Configure MQTT server ${settings.server}`);        
             mqttClient = mqtt.connect({host: `${settings.server}`, username: settings.username, password: settings.password});
             setInterval(getTemperatures, settings.publishTimer * 1000);
         }
@@ -37,6 +37,8 @@ function publishTemperature(sensorId, value) {
         mqttClient.publish(`${settings.topic}/${sensorId}/SENSOR`, value.toString(), {}, (err) => {
             if(!err) {
                 log(`Published ${sensorId}: ${value}°C`);
+            } else {
+                log(`Error on MQTT publish: ${err}`);
             }
         });
     }
