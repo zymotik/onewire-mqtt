@@ -33,7 +33,13 @@ function loadSettings(){
 }
 
 function publishTemperature(sensorId, value) {
-    mqttClient.publish(`${settings.topic}/${sensorId}/SENSOR`, value);
+    if (sensorId && !isNaN(value)){
+        mqttClient.publish(`${settings.topic}/${sensorId}/SENSOR`, value.toString(), {}, (err) => {
+            if(!err) {
+                log(`Published ${sensorId}: ${value}°C`);
+            }
+        });
+    }
 }
 
 async function findSensors() {
