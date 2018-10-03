@@ -34,9 +34,12 @@ function loadSettings(){
 
 function publishTemperature(sensorId, value) {
     if (sensorId && !isNaN(value)){
-        mqttClient.publish(`${settings.topic}/${sensorId}/SENSOR`, value.toString(), {}, (err) => {
+        const topic = `${settings.topic}/${sensorId}/SENSOR`;
+        const data = {"DS18B20": { "Address": sensorId, "Temperature": value } };
+        mqttClient.publish(topic, 
+                            JSON.stringify(data), {}, (err) => {
             if(!err) {
-                log(`Published ${sensorId}: ${value}°C`);
+                log(`Published ${topic}: ${value}°C`);
             } else {
                 log(`Error on MQTT publish: ${err}`);
             }
