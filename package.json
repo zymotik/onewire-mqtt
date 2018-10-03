@@ -4,7 +4,7 @@
   "description": "publish onewire to mqtt with node",
   "main": "index.js",
   "scripts": {
-    "run": "node index.js"
+    "start": "node index.js"
   },
   "author": "Ian Brown",
   "license": "UNLICENSED",
