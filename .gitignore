@@ -59,3 +59,6 @@ typings/
 
 # next.js build output
 .next
+
+# save accidentally checking in a settings file
+settings.json

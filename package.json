@@ -5,17 +5,36 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "debug": "node index.js --inspect-brk=9229",
+    "test": "nyc mocha --compilers js:babel-core/register --exit",
+    "install-none-pi": "npm install --force",
     "service-install": "node service/install.js",
     "service-uninstall": "node service/uninstall.js",
     "view-log": "tail -f /var/log/daemon.log"
   },
   "author": "Ian Brown",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "ds18b20": "^0.1.0",
     "fs": "0.0.1-security",
     "moment-mini": "^2.22.1",
     "mqtt": "^2.18.8",
     "node-service-linux": "^0.1.13"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-latest": "^6.24.1",
+    "chai": "^4.2.0",
+    "colors": "^1.3.2",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "rewiremock": "^3.12.3",
+    "sinon": "^7.1.1",
+    "sinon-chai": "^3.2.0"
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ]
   }
 }

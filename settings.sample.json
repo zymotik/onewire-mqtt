@@ -2,6 +2,6 @@
     "server": "192.168.0.5",
     "username": "homeassistant",
     "password": "password",
-    "publishTimer": 30,
+    "publishFrequency": 30,
     "topic": "tele/onewire"
 }

@@ -1,40 +1,25 @@
 const mqtt = require('mqtt');
 const onewire = require('ds18b20');
 const fs = require('fs');
+const { config } = require('./config');
 
-let settings = {};
 let sensorIds = [];
 
 async function init(){
-    settings = await loadSettings();
-    if (settings && settings.server) {
-        
+    if (!config.loadError) {    
         sensorIds = await findSensors();
 
         if (sensorIds.length > 0) {
-            log(`Configure MQTT server ${settings.server}`);        
-            mqttClient = mqtt.connect({host: `${settings.server}`, username: settings.username, password: settings.password});
-            setInterval(getTemperatures, settings.publishTimer * 1000);
+            log(`Configure MQTT server ${config.server}`);        
+            mqttClient = mqtt.connect({host: `${config.server}`, username: config.username, password: config.password});
+            setInterval(getTemperatures, config.publishFrequency * 1000);
         }
     }
 }
 
-function loadSettings(){
-    return new Promise((resolve, reject) => {
-        fs.readFile('./settings.json', (err, data) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-            }
-            resolve(JSON.parse(data));
-        });
-    
-    });
-}
-
 function publishTemperature(sensorId, value) {
     if (sensorId && !isNaN(value)){
-        const topic = `${settings.topic}/${sensorId}/SENSOR`;
+        const topic = `${config.topic}/${sensorId}/SENSOR`;
         const data = {"DS18B20": { "Address": sensorId, "Temperature": value } };
         mqttClient.publish(topic, 
                             JSON.stringify(data), {}, (err) => {
