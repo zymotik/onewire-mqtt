@@ -4,7 +4,10 @@
   "description": "publish onewire to mqtt with node",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "service-install": "node service/install.js",
+    "service-uninstall": "node service/uninstall.js",
+    "view-log": "tail -f /var/log/daemon.log"
   },
   "author": "Ian Brown",
   "license": "UNLICENSED",
@@ -12,6 +15,7 @@
     "ds18b20": "^0.1.0",
     "fs": "0.0.1-security",
     "moment-mini": "^2.22.1",
-    "mqtt": "^2.18.8"
+    "mqtt": "^2.18.8",
+    "node-service-linux": "^0.1.13"
   }
 }
