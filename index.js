@@ -1,4 +1,4 @@
-const mqtt = require('mqtt');
+const mqtt = require('./mqtt');
 const onewire = require('ds18b20');
 const { config } = require('./config');
 const { log } = require('./logger');
@@ -12,10 +12,10 @@ async function init(){
         if (sensorIds.length > 0) {
             if (config.username && config.password) {
                 log(`Connect MQTT server with credentials`);
-                mqttClient = mqtt.connect({host: `${config.server}`, username: config.username, password: config.password});
+                mqtt.connect(config.server, config.username, config.password);
             } else {
                 log(`Connect MQTT server`);
-                mqttClient = mqtt.connect({host: `${config.server}`});
+                mqtt.connect(config.server);
             }
             
             setInterval(getTemperatures, config.publishFrequency * 1000);
@@ -27,14 +27,7 @@ function publishTemperature(sensorId, value) {
     if (sensorId && !isNaN(value)){
         const topic = `${config.topic}/${sensorId}/SENSOR`;
         const data = {"DS18B20": { "Address": sensorId, "Temperature": value } };
-        mqttClient.publish(topic, 
-                            JSON.stringify(data), {}, (err) => {
-            if(!err) {
-                log(`Published ${topic}: ${value}°C`, true);
-            } else {
-                log(`Error on MQTT publish: ${err}`);
-            }
-        });
+        mqtt.publish(topic, JSON.stringify(data));
     }
 }
 
