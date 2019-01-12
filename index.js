@@ -1,7 +1,7 @@
-const mqtt = require('mqtt');
+const mqtt = require('./mqtt');
 const onewire = require('ds18b20');
-const fs = require('fs');
 const { config } = require('./config');
+const { log } = require('./logger');
 
 let sensorIds = [];
 
@@ -10,8 +10,14 @@ async function init(){
         sensorIds = await findSensors();
 
         if (sensorIds.length > 0) {
-            log(`Configure MQTT server ${config.server}`);        
-            mqttClient = mqtt.connect({host: `${config.server}`, username: config.username, password: config.password});
+            if (config.username && config.password) {
+                log(`Connect MQTT server with credentials`);
+                mqtt.connect(config.server, config.username, config.password);
+            } else {
+                log(`Connect MQTT server`);
+                mqtt.connect(config.server);
+            }
+            
             setInterval(getTemperatures, config.publishFrequency * 1000);
         }
     }
@@ -21,20 +27,14 @@ function publishTemperature(sensorId, value) {
     if (sensorId && !isNaN(value)){
         const topic = `${config.topic}/${sensorId}/SENSOR`;
         const data = {"DS18B20": { "Address": sensorId, "Temperature": value } };
-        mqttClient.publish(topic, 
-                            JSON.stringify(data), {}, (err) => {
-            if(!err) {
-                log(`Published ${topic}: ${value}°C`);
-            } else {
-                log(`Error on MQTT publish: ${err}`);
-            }
-        });
+        mqtt.publish(topic, JSON.stringify(data));
     }
 }
 
 async function findSensors() {
     return new Promise((resolve, _) => {
         log('Searching for OneWire sensors...');
+        
         onewire.sensors(function(err, ids) {
             if(err) {
                 console.error(err);
@@ -53,23 +53,13 @@ async function findSensors() {
 
 function getTemperatures() {
     sensorIds.map((id) => {
-        log(`Getting temperature for ${id}`);
+        log(`Getting temperature for ${id}`, true);
         onewire.temperature(id, {}, (err, data) => {
            if (!err && data) {
             publishTemperature(id, data);
            }
         });
     });
-}
-
-function log(message){
-    const now = new Date();
-    const strNow = `${pad(now.getDate())}/${pad(now.getMonth())}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-    console.log(`${strNow} ${message}`);
-}
-
-function pad(number){
-    return number.toString().padStart(2,0);
 }
 
 init();
