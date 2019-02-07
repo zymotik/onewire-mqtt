@@ -48,8 +48,6 @@ function publish(topic, message) {
         throw new Error('Topic required');
     } else if (typeof message === 'undefined') {
         throw new Error('Message required');
-    } else if (typeof mqttClient === 'undefined' || !mqttClient.connected) {
-        throw new Error('MQTT broker not connected, use connect() first');        
     }
 
     log(`Publish '${topic}' message '${message}'`, true);
