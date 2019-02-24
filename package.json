@@ -8,9 +8,9 @@
     "debug": "node index.js --inspect-brk=9229",
     "test": "nyc mocha --compilers js:babel-core/register --exit",
     "install-none-pi": "npm install --force",
-    "service-install": "forever-service install onewiremqtt --script index.js --start",
-    "service-remove": "forever-service delete onewiremqtt",
-    "view-log": "tail -f /var/log/onewiremqtt.log"
+    "service-install": "forever-service install onewire --script index.js --start",
+    "service-remove": "forever-service delete onewire",
+    "view-log": "tail -f /var/log/onewire.log"
   },
   "author": "Ian Brown",
   "license": "MIT",
