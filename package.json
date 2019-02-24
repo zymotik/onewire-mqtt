@@ -18,8 +18,7 @@
     "ds18b20": "^0.1.0",
     "fs": "0.0.1-security",
     "moment-mini": "^2.22.1",
-    "mqtt": "^2.18.8",
-    "node-service-linux": "^0.1.13"
+    "mqtt": "^2.18.8"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
