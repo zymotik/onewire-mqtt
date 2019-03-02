@@ -40,7 +40,10 @@ async function findSensors() {
                 console.error(err);
                 resolve([]);
             } else if (ids) {
-                log(`Found: ${ ids.toString() }`);
+                log('Sensors found. Publishing to:')
+                ids.forEach((id)=> {
+                    log(`${config.topic}/${id}/SENSOR`);
+                });
                 resolve(ids);
             } else {
                 log('No sensors found');
